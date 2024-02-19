@@ -30,6 +30,10 @@ Additionally, it allows for operations such as creating .asq files from the Plac
 ## 🏁 Getting Started <a name = "getting_started"></a>
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See [deployment](#deployment) for notes on how to deploy the project on a live system.
 
+execute this once javac -cp ".;lib/opencsv-5.7.1.jar;lib/commons-lang3-3.14.0.jar;lib/jaxb-api-2.3.0.jar;lib/mongo-java-driver-3.12.14.jar;lib/mongodb-driver-sync-4.11.1.jar" FileConverterGUI.java
+y esto después java -cp ".;lib/opencsv-5.7.1.jar;lib/commons-lang3-3.14.0.jar;lib/jaxb-api-2.3.0.jar;lib/mongo-java-driver-3.12.14.jar;lib/mongodb-driver-sync-4.11.1.jar" FileConverterGUI
+
+
 ### Prerequisites
 What things you need to install the software and how to install them.
 
