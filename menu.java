@@ -16,6 +16,8 @@ public class menu {
             System.out.println("2. Convert csv to Placa");
             System.out.println("3. Convert Placa to asq");
             System.out.println("4. Convert Placa to csv");
+            System.out.println("5. Choose center");
+            System.out.println("6. Flip components");
             System.out.println("0. Exit");
             System.out.print("Enter your choice: ");
 
@@ -34,9 +36,9 @@ public class menu {
                 case 1:
                     System.out.print("Enter the input file name (without extension): ");
                     String fileName1 = scanner.next() + ".txt";
-                    placaArray = converter.createPlacaArrayFromTXT("./Files/" + fileName1);
+                    placaArray = MongoDBConnector.createPlacaArrayFromTXT("./Files/" + fileName1);
                     if (placaArray != null) {
-                        System.out.print("Enter the name for this Placa: ");
+                        System.out.print("Enter the ID (name) for this Placa: ");
                         String placaID = scanner.next();
                         MongoDBConnector.addPlaca(placaID, placaArray);
                     } else {
@@ -46,9 +48,9 @@ public class menu {
                 case 2:
                     System.out.print("Enter the input file name (without extension): ");
                     String fileName2 = scanner.next() + ".csv";
-                    placaArray = converter.createPlacaArrayFromCSV("./Files/" + fileName2);
+                    placaArray = MongoDBConnector.createPlacaArrayFromCSV("./Files/" + fileName2);
                     if (placaArray != null) {
-                        System.out.print("Enter the name for this Placa: ");
+                        System.out.print("Enter the ID (name) for this Placa: ");
                         String placaID = scanner.next();
                         MongoDBConnector.addPlaca(placaID, placaArray);
                     } else {
@@ -84,7 +86,33 @@ public class menu {
                         writeToFile(csvContent, outputFileName4, ".csv");
                     }
                     break;
+                case 5:
+                    System.out.println("You selected: Choose Center");
 
+                    System.out.print("Enter the PlacaID: ");
+                    String placaID5 = scanner.next();
+
+                    System.out.print("Enter the ElementID of the new center: ");
+                    String elementID5 = scanner.next();
+
+                    if (MongoDBConnector.chooseCenter(placaID5, elementID5)) {
+                        System.out.println("Center chosen successfully.");
+                    } else {
+                        System.out.println("Failed to choose center. Please check your inputs.");
+                    }
+                    break;
+                case 6:
+                    System.out.println("You selected: FlipComponents");
+
+                    System.out.print("Enter the PlacasID: ");
+                    String placasID6 = scanner.next();
+                    boolean flipSuccess = MongoDBConnector.flipComponents(placasID6);
+                    if (flipSuccess) {
+                        System.out.println("Components flipped successfully.");
+                    } else {
+                        System.out.println("Failed to flip components.");
+                    }
+                    break;
                 case 0:
                     System.out.println("Exiting...");
                     break;
