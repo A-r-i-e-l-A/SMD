@@ -99,7 +99,7 @@ public class FileConverterGUI extends JFrame {
                     String fileName = selectedFile.getAbsolutePath();
 
                     // Crea el array de placas a partir del archivo TXT seleccionado
-                    placaArray = converter.createPlacaArrayFromTXT(fileName);
+                    placaArray = MongoDBConnector.createPlacaArrayFromTXT(fileName);
 
                     if (placaArray != null) {
                         JOptionPane.showMessageDialog(FileConverterGUI.this, "Placas created from the file:");
@@ -145,7 +145,7 @@ public class FileConverterGUI extends JFrame {
                     // Verificar si el archivo seleccionado es un archivo CSV
                     if (filePath.toLowerCase().endsWith(".csv")) {
                         // Crear el array de placas a partir del archivo CSV seleccionado
-                        placaArray = converter.createPlacaArrayFromCSV(filePath);
+                        placaArray = MongoDBConnector.createPlacaArrayFromCSV(filePath);
 
                         if (placaArray != null) {
                             // Mostrar un mensaje de éxito y las primeras 3 placas creadas
