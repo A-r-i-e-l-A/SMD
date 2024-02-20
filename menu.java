@@ -36,7 +36,7 @@ public class menu {
                 case 1:
                     System.out.print("Enter the input file name (without extension): ");
                     String fileName1 = scanner.next() + ".txt";
-                    placaArray = MongoDBConnector.createPlacaArrayFromTXT("./Files/" + fileName1);
+                    placaArray = converter.createPlacaArrayFromTXT("./Files/" + fileName1);
                     if (placaArray != null) {
                         System.out.print("Enter the ID (name) for this Placa: ");
                         String placaID = scanner.next();
@@ -48,7 +48,7 @@ public class menu {
                 case 2:
                     System.out.print("Enter the input file name (without extension): ");
                     String fileName2 = scanner.next() + ".csv";
-                    placaArray = MongoDBConnector.createPlacaArrayFromCSV("./Files/" + fileName2);
+                    placaArray = converter.createPlacaArrayFromCSV("./Files/" + fileName2);
                     if (placaArray != null) {
                         System.out.print("Enter the ID (name) for this Placa: ");
                         String placaID = scanner.next();
