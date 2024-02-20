@@ -26,9 +26,9 @@ The core functionality of the code includes converting text files and CSV files 
 Additionally, it allows for operations such as creating .asq files from the Placa data, converting Placas to CSV format, and selecting a specific component or position to serve as the center of the coordinate axis.
 
 ## 🏁 Getting Started <a name = "getting_started"></a>
-Open a folder with all these files in your less hated IDE and execute this command: `javac -cp ".;lib/opencsv-5.7.1.jar;lib/commons-lang3-3.14.0.jar;lib/jaxb-api-2.3.0.jar;lib/mongo-java-driver-3.12.14.jar;lib/mongodb-driver-sync-4.11.1.jar" FileConverterGUI.java`
+Go to CMD corow feknskfnseufhwfh folder and compile with `javac -cp "lib/*" FileConverterGUI.java MongoDBConnector.java Placa.java`
 
-After the first execution, just execute the following command every time: `java -cp ".;lib/opencsv-5.7.1.jar;lib/commons-lang3-3.14.0.jar;lib/jaxb-api-2.3.0.jar;lib/mongo-java-driver-3.12.14.jar;lib/mongodb-driver-sync-4.11.1.jar" FileConverterGUI`
+and then just execute with `java -cp .;"lib/*" FileConverterGUI`
 
 ## 🎈 Usage <a name="usage"></a>
 
