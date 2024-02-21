@@ -28,13 +28,9 @@ The core functionality of the code includes converting text files and CSV files 
 Additionally, it allows for operations such as creating .asq files from the Placa data, converting Placas to CSV format, and selecting a specific component or position to serve as the center of the coordinate axis.
 
 ## 🏁 Getting Started <a name = "getting_started"></a>
-Open your favorite terminal, go to the folder where you saved the files and execute the following command to compile them:
+Open your favorite terminal, go to the folder where you saved the files and execute the following command:
 
-`javac -cp "lib/*" FileConverterGUI.java MongoDBConnector.java Placa.java`
-
-Once the files are compiled, every time you want to run the program, use the following command:
-
-`java -cp .;"lib/*" FileConverterGUI`
+`java -cp bin;lib/* FileConverterGUI`
 
 In the Files folder there are examples for each kind of input and output file.
 
