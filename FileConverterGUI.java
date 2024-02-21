@@ -35,6 +35,7 @@ public class FileConverterGUI extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
+        // Creating and initializing buttons with specific font properties
         Font buttonFont = new Font(Font.SANS_SERIF, Font.BOLD, 16);
         txtToPlacaButton = new JButton("Upload from .txt");
         txtToPlacaButton.setFont(buttonFont);
@@ -51,6 +52,7 @@ public class FileConverterGUI extends JFrame {
         reloadDatabaseButton = new JButton("Reload");
         reloadDatabaseButton.setFont(buttonFont);
 
+        // Creating panel to hold buttons
         JPanel panel = new JPanel();
         panel.add(txtToPlacaButton);
         panel.add(csvToPlacaButton);
@@ -62,8 +64,8 @@ public class FileConverterGUI extends JFrame {
         panel.setBorder(new EmptyBorder(0, 100, 120, 100));
         add(panel, BorderLayout.NORTH);
 
+        // Creating and initializing table with specific font properties
         Font tableFont = new Font(Font.SANS_SERIF, Font.PLAIN, 16);
-
         table = new JTable();
         table.setPreferredScrollableViewportSize(new Dimension(300, table.getRowHeight()));
         table.setFillsViewportHeight(true);
@@ -76,6 +78,7 @@ public class FileConverterGUI extends JFrame {
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
 
+        // Adding action listeners to buttons
         reloadDatabaseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -96,9 +99,11 @@ public class FileConverterGUI extends JFrame {
             }
         });
 
+        // Action listener for the "Upload from .txt" button
         txtToPlacaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // File chooser for selecting .txt file
                 JFileChooser fileChooser = new JFileChooser();
                 fileChooser.setDialogTitle("Select a TXT file");
 
@@ -111,12 +116,14 @@ public class FileConverterGUI extends JFrame {
                     File selectedFile = fileChooser.getSelectedFile();
                     String fileName = selectedFile.getAbsolutePath();
 
+                    // Creating Placa array from TXT file
                     placaArray = MongoDBConnector.createPlacaArrayFromTXT(fileName);
 
                     if (placaArray != null) {
                         String placasID = JOptionPane.showInputDialog(FileConverterGUI.this,
                                 "Enter the name for the PCB:");
                         if (placasID != null && !placasID.isEmpty()) {
+                            // Adding Placa to MongoDB
                             MongoDBConnector.addPlaca(placasID, placaArray);
                         } else {
                             JOptionPane.showMessageDialog(FileConverterGUI.this, "ERROR: Invalid name");
@@ -130,9 +137,11 @@ public class FileConverterGUI extends JFrame {
             }
         });
 
+        // Action listener for the "Upload from .csv" button
         csvToPlacaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // File chooser for selecting .csv file
                 JFileChooser fileChooser = new JFileChooser();
                 fileChooser.setDialogTitle("Select a CSV file");
 
@@ -145,12 +154,14 @@ public class FileConverterGUI extends JFrame {
                     File selectedFile = fileChooser.getSelectedFile();
                     String filePath = selectedFile.getAbsolutePath();
 
+                    // Creating Placa array from CSV file
                     placaArray = MongoDBConnector.createPlacaArrayFromCSV(filePath);
 
                     if (placaArray != null) {
                         String placasID = JOptionPane.showInputDialog(FileConverterGUI.this,
                                 "Enter the name for the PCB:");
                         if (placasID != null && !placasID.isEmpty()) {
+                            // Adding Placa to MongoDB
                             MongoDBConnector.addPlaca(placasID, placaArray);
                         } else {
                             JOptionPane.showMessageDialog(FileConverterGUI.this, "ERROR: Invalid name");
@@ -164,17 +175,21 @@ public class FileConverterGUI extends JFrame {
             }
         });
 
+        // Action listener for the "Export to .asq" button
         placaToasqButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Prompt user to enter PCB name
                 String placaID3 = JOptionPane.showInputDialog(FileConverterGUI.this, "Enter the PCB name:");
 
+                // Check if PCB exists
                 if (!MongoDBConnector.placaExists(placaID3)) {
                     JOptionPane.showMessageDialog(FileConverterGUI.this,
                             "ERROR: PCB with name '" + placaID3 + "' does not exist.");
                     return;
                 }
 
+                // Convert Placa data to ASQ format
                 String asqContent = MongoDBConnector.placaArrayToASQ(placaID3);
                 String outputFileName3 = JOptionPane.showInputDialog(FileConverterGUI.this,
                         "Enter the name of the output file (without extension):");
@@ -182,17 +197,21 @@ public class FileConverterGUI extends JFrame {
             }
         });
 
+        // Action listener for the "Export to .csv" button
         placaTocsvButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Prompt user to enter PCB name
                 String placaID4 = JOptionPane.showInputDialog(FileConverterGUI.this, "Enter the PCB name:");
 
+                // Check if PCB exists
                 if (!MongoDBConnector.placaExists(placaID4)) {
                     JOptionPane.showMessageDialog(FileConverterGUI.this,
                             "ERROR: PCB with name '" + placaID4 + "' does not exist.");
                     return;
                 }
 
+                // Convert Placa data to CSV format
                 String asqContent = MongoDBConnector.placaArrayToCSV(placaID4);
                 String outputFileName4 = JOptionPane.showInputDialog(FileConverterGUI.this,
                         "Enter the name of the output file (without extension):");
@@ -200,19 +219,23 @@ public class FileConverterGUI extends JFrame {
             }
         });
 
+        // Action listener for the "Center components" button
         choosecenterButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Prompt user to enter PCB name and element ID
                 String placaID5 = JOptionPane.showInputDialog(FileConverterGUI.this, "Enter the PCB name:");
                 String elementID5 = JOptionPane.showInputDialog(FileConverterGUI.this,
                         "Enter the ComponentID of the new center:");
 
+                // Check if PCB exists
                 if (!MongoDBConnector.placaExists(placaID5)) {
                     JOptionPane.showMessageDialog(FileConverterGUI.this,
                             "ERROR: PCB with name '" + placaID5 + "' does not exist.");
                     return;
                 }
 
+                // Choose new center for the PCB
                 if (MongoDBConnector.chooseCenter(placaID5, elementID5)) {
                     JOptionPane.showMessageDialog(FileConverterGUI.this, "New center chosen successfully");
                 } else {
@@ -222,17 +245,21 @@ public class FileConverterGUI extends JFrame {
             }
         });
 
+        // Action listener for the "Flip components" button
         flipcomponentsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Prompt user to enter PCB name
                 String placasID6 = JOptionPane.showInputDialog(FileConverterGUI.this, "Enter the PCB name:");
 
+                // Check if PCB exists
                 if (!MongoDBConnector.placaExists(placasID6)) {
                     JOptionPane.showMessageDialog(FileConverterGUI.this,
                             "ERROR: PCB with name '" + placasID6 + "' does not exist.");
                     return;
                 }
 
+                // Flip components of the PCB
                 boolean flipSuccess = MongoDBConnector.flipComponents(placasID6);
                 if (flipSuccess) {
                     JOptionPane.showMessageDialog(FileConverterGUI.this, "The components were flipped successfully.");
@@ -245,7 +272,9 @@ public class FileConverterGUI extends JFrame {
         updateTableData();
     }
 
+    // Method to write content to a file
     private static void writeToFile(String content, String fileName, String fileExtension) {
+        // File chooser for selecting destination folder
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Choose the destination folder");
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -259,7 +288,7 @@ public class FileConverterGUI extends JFrame {
             try (FileWriter writer = new FileWriter(filePath)) {
                 writer.write(content);
                 System.out.println(
-                        "File '" + fileName + "' succesfully created at " + selectedDirectory.getAbsolutePath());
+                        "File '" + fileName + "' successfully created at " + selectedDirectory.getAbsolutePath());
             } catch (IOException e) {
                 System.err.println("Error saving the file: " + e.getMessage());
             }
@@ -268,6 +297,7 @@ public class FileConverterGUI extends JFrame {
         }
     }
 
+    // Method to update table data from MongoDB
     private void updateTableData() {
         List<Document> placasList = MongoDBConnector.getAllPlacas();
 
@@ -284,6 +314,7 @@ public class FileConverterGUI extends JFrame {
         table.setModel(model);
     }
 
+    // Method to display Placa elements in a dialog
     private void displayPlacaElements(String placaID) {
         List<Document> elements = MongoDBConnector.getPlacaElements(placaID);
 
