@@ -47,12 +47,12 @@ Remember that in the Files folder there are examples for each kind of input and 
 
 ### Exporting PCB
 - With the export buttons you can choose a PCB from the database and save its information in your computer.
+- 
+### Choosing Center
+- If you need to set a specific component as the center of the coordinate axis, click on the "Center Components" button, then input the PCB name and the component ID. This operation adjusts the positions of other components relative to the chosen center.
 
 ### Flipping Components
 - To flip components on a PCB, click on the "Flip Components" button and select the PCB name. This operation multiplies the PosX values of the elements by -1, effectively flipping them across the Y-axis.
-
-### Choosing Center
-- If you need to set a specific component as the center of the coordinate axis, click on the "Center Components" button, then input the PCB name and the component ID. This operation adjusts the positions of other components relative to the chosen center.
 
 ### Reload
 - Updates the table with the information with the database. Useful to see the changes that have been made.
