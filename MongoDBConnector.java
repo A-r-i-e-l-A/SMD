@@ -2,29 +2,26 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import java.util.ArrayList;
-import java.util.List;
-import java.text.DecimalFormat;
-import java.util.Scanner;
-
-import static com.mongodb.client.model.Filters.eq;
-import org.bson.Document;
-
 import com.mongodb.client.FindIterable;
-
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-
-import com.opencsv.CSVReader;
-import com.opencsv.exceptions.CsvValidationException;
+import javax.swing.JOptionPane;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
+import static com.mongodb.client.model.Filters.eq;
+import org.bson.Document;
 
 public class MongoDBConnector {
-
+    // ignore this incredible security system (:
     private static final String connectionString = "mongodb://admin:admin@clustersaboristav2-shard-00-00.nmetz.mongodb.net:27017,clustersaboristav2-shard-00-01.nmetz.mongodb.net:27017,clustersaboristav2-shard-00-02.nmetz.mongodb.net:27017/?replicaSet=atlas-osxu20-shard-0&ssl=true&authSource=admin";
     private static final MongoClientURI uri = new MongoClientURI(connectionString);
     private static final MongoClient mongoClient = new MongoClient(uri);
     private static final MongoDatabase database = mongoClient.getDatabase("SMD");
+    private static final MongoCollection<Document> collection = database.getCollection("placas");
 
     public static Placa[] createPlacaArrayFromTXT(String filename) {
         List<Placa> placasList = new ArrayList<>();
@@ -81,7 +78,7 @@ public class MongoDBConnector {
             while ((line = reader.readNext()) != null) {
                 lineCount++;
                 if (lineCount == 1) {
-                    continue; // Skip header line
+                    continue;
                 }
 
                 if (line.length == 7) {
@@ -108,7 +105,6 @@ public class MongoDBConnector {
             e.printStackTrace();
         }
 
-        // Convert ArrayList to array
         Placa[] placasArray = new Placa[placasList.size()];
         placasArray = placasList.toArray(placasArray);
 
@@ -116,28 +112,25 @@ public class MongoDBConnector {
     }
 
     public static void addPlaca(String placaID, Placa[] placaArray) {
-        MongoCollection<Document> collection = database.getCollection("placas");
 
         Document existingDocument = collection.find(eq("placaID", placaID)).first();
 
         if (existingDocument != null) {
-            Scanner scanner = new Scanner(System.in);
-            System.out.println("The Placa " + placaID + " already exists. Do you want to overwrite it? (Y/N)");
-            String input = scanner.nextLine().trim().toUpperCase();
-            scanner.close();
+            int option = JOptionPane.showConfirmDialog(null,
+                    "The PCB '" + placaID + "' already exists. Do you want to overwrite it?", "Duplicated PCB Name",
+                    JOptionPane.YES_NO_OPTION);
 
-            if (!input.equals("Y")) {
-                System.out.println("Operation canceled.");
+            if (option != JOptionPane.YES_OPTION) {
+                JOptionPane.showMessageDialog(null, "Operation cancelled.");
                 return;
             }
-
             collection.deleteOne(existingDocument);
         }
 
         Document elementsDoc = new Document();
         elementsDoc.append("placaID", placaID);
-
         List<Document> elementsList = new ArrayList<>();
+
         for (Placa placa : placaArray) {
             Document elementDoc = new Document("ID", placa.getID())
                     .append("type", placa.getType())
@@ -152,12 +145,14 @@ public class MongoDBConnector {
 
         elementsDoc.append("elements", elementsList);
         elementsDoc.append("size", placaArray.length);
-
         collection.insertOne(elementsDoc);
+
+        JOptionPane.showMessageDialog(null, "PCB successfully uploaded.");
     }
 
     public static String placaArrayToASQ(String placaID) {
         Document existingDocument = database.getCollection("placas").find(eq("placaID", placaID)).first();
+
         if (existingDocument == null) {
             System.out.println("placaID " + placaID + " does not exist.");
             return null;
@@ -185,8 +180,6 @@ public class MongoDBConnector {
     public static String placaArrayToCSV(String placaID) {
         System.out.println("Attempting to create CSV for placaID: " + placaID);
 
-        MongoCollection<Document> collection = database.getCollection("placas");
-
         Document query = new Document("placaID", placaID);
         Document result = collection.find(query).first();
 
@@ -198,11 +191,11 @@ public class MongoDBConnector {
         StringBuilder sb = new StringBuilder();
 
         sb.append("Designator,NozzleNum,StackNum,Mid X,Mid Y,Rotation,Height,Speed,Vision,Pressure,Explanation\n");
-
         sb.append("\n");
 
         @SuppressWarnings("unchecked")
         List<Document> elementsList = (List<Document>) result.get("elements");
+
         for (Document elementDoc : elementsList) {
             sb.append(elementDoc.getString("ID")).append(",1/2,1,");
 
@@ -224,9 +217,7 @@ public class MongoDBConnector {
     }
 
     public static boolean flipComponents(String placaID) {
-        MongoCollection<Document> collection = database.getCollection("placas");
 
-        // Find the document with the given placaID
         Document query = new Document("placaID", placaID);
         Document result = collection.find(query).first();
 
@@ -235,26 +226,21 @@ public class MongoDBConnector {
             return false;
         }
 
-        // Retrieve the elements list from the document
         @SuppressWarnings("unchecked")
         List<Document> elementsList = (List<Document>) result.get("elements");
 
-        // Update the elements by multiplying their posX by -1
         for (Document elementDoc : elementsList) {
             double posX = elementDoc.getDouble("posX");
             elementDoc.put("posX", posX * -1);
         }
 
-        // Update the document in the collection
         collection.updateOne(query, new Document("$set", new Document("elements", elementsList)));
 
         return true;
     }
 
     public static boolean chooseCenter(String placaID, String elementID) {
-        MongoCollection<Document> collection = database.getCollection("placas");
 
-        // Find the document with the given placaID
         Document query = new Document("placaID", placaID);
         Document result = collection.find(query).first();
 
@@ -263,11 +249,9 @@ public class MongoDBConnector {
             return false;
         }
 
-        // Retrieve the elements list from the document
         @SuppressWarnings("unchecked")
         List<Document> elementsList = (List<Document>) result.get("elements");
 
-        // Find the element with the given elementID
         Document chosenElement = null;
         for (Document elementDoc : elementsList) {
             if (elementDoc.getString("ID").equals(elementID)) {
@@ -281,12 +265,10 @@ public class MongoDBConnector {
             return false;
         }
 
-        // Calculate the offset
         double offsetX = chosenElement.getDouble("posX");
         double offsetY = chosenElement.getDouble("posY");
 
-        // Update the elements' posX and posY by subtracting the offset and rounding to
-        // three decimals
+        // Update the elements' posX and posY and round to three decimals
         DecimalFormat df = new DecimalFormat("#.###");
         for (Document elementDoc : elementsList) {
             double posX = elementDoc.getDouble("posX");
@@ -298,20 +280,14 @@ public class MongoDBConnector {
         }
 
         collection.updateOne(query, new Document("$set", new Document("elements", elementsList)));
-
         return true;
     }
 
     public static List<Document> getAllPlacas() {
         List<Document> placasList = new ArrayList<>();
 
-        // Get the collection
-        MongoCollection<Document> collection = database.getCollection("placas");
-
-        // Retrieve all documents from the collection
         FindIterable<Document> placasDocuments = collection.find();
 
-        // Iterate over the documents and add them to the list
         for (Document document : placasDocuments) {
             placasList.add(document);
         }
@@ -320,27 +296,29 @@ public class MongoDBConnector {
     }
 
     public static List<Document> getPlacaElements(String placaID) {
-        // Initialize an empty list to store the elements
         List<Document> elements = new ArrayList<>();
 
-        // Get the collection
-        MongoCollection<Document> collection = database.getCollection("placas");
-
-        // Find the document with the given placaID
         Document query = new Document("placaID", placaID);
         Document result = collection.find(query).first();
 
-        // Check if the document exists
         if (result != null) {
-            // Retrieve the elements list from the document
             @SuppressWarnings("unchecked")
             List<Document> elementsList = (List<Document>) result.get("elements");
-
-            // Add the elements to the list
             elements.addAll(elementsList);
         }
 
-        // Return the list of elements
         return elements;
+    }
+
+    public static boolean placaExists(String placaID) {
+        try (MongoClient mongoClient = new MongoClient(uri)) {
+            Document query = new Document("placaID", placaID);
+            long count = collection.countDocuments(query);
+
+            return count > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
