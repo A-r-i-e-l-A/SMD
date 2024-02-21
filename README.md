@@ -62,7 +62,7 @@ In the Files folder there are examples for each kind of input and output file.
 
 <img width=580px height=500px src="https://github.com/Ariel-A-C/SMD/assets/144775269/3b3674d2-8071-45eb-9a44-ba8c00b4f484" alt="Component Table">
 
-## ℹ️ Additional Information <a name = "information"></a>
+## 📋 Additional Information <a name = "information"></a>
 If, for some reason, you were to look at the code, you'd see confusing nomenclature. That's because we didn't really plan ahead and improvised a lot. When we finished we realized half of the words wouldn't make sense to users so we changed a few things in the end.
 
 ## ⛏️ Built Using <a name = "built_using"></a>
