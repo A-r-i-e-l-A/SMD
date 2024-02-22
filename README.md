@@ -28,6 +28,8 @@ The core functionality of the code includes converting text files and CSV files 
 Additionally, it allows for operations such as creating .asq files from the Placa data, converting Placas to CSV format, and selecting a specific component or position to serve as the center of the coordinate axis.
 
 ## 🏁 Getting Started <a name = "getting_started"></a>
+You'll need to have Java installed in your computer to run the program (Java Runtime class version 61.0).
+
 Open your favorite terminal, go to the folder where you saved the files and execute the following command:
 
 `java -cp bin;lib/* FileConverterGUI`
