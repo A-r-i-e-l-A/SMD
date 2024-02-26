@@ -71,6 +71,6 @@ If, for some reason, you were to look at the code, you'd see confusing nomenclat
 - [Ariel](https://github.com/Ariel-A-C)
 - [Miquel](https://github.com/miquelnicolas)
 
-## 🎉 Acknowledgement <a name = "acknowledgement"></a>
+## 🎉 Acknowledgements <a name = "acknowledgement"></a>
 - [Francisco](https://github.com/fmesasc) - Teacher who made us work on this while we had like 3 other projects and ended up having to extend the deadline.
 - Secret admirer - For helping me with improving the user experience and ruining my whole evening.
