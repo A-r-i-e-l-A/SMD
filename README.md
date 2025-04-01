@@ -68,7 +68,7 @@ If, for some reason, you were to look at the code, you'd see confusing nomenclat
 - [MongoDB](https://www.mongodb.com/) - Database
 
 ## ✍️ Authors <a name = "authors"></a>
-- [Ariel](https://github.com/Ariel-A-C)
+- [Ariel](https://github.com/A-r-i-e-l-A)
 - [Miquel](https://github.com/miquelnicolas)
 
 ## 🎉 Acknowledgements <a name = "acknowledgement"></a>
